@@ -1,0 +1,22 @@
+name: Execute Javascript
+description: Execute arbitrary Javascript code in a Github Action
+author: "https://github.com/amochkin"
+inputs:
+  js:
+    description: "Javascript code to execute"
+    required: true
+  js_input:
+    description: "Input name with Javascript code"
+    default: "js"
+  js_result:
+    description: "Output name to use for Javascript result"
+    default: "result"
+runs:
+  using: "node16"
+  main: "dist/index.js"
+branding:
+  icon: code
+  color: blue
+outputs:
+  result:
+    description: "Result of the Javascript code"

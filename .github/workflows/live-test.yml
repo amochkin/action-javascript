@@ -1,0 +1,91 @@
+name: Manual Live Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      file:
+        description: 'JSON File (relative to root)'
+        default: 'package.json'
+      value:
+        description: 'Value to set'
+        default: '1.2.3'
+      output_name:
+        description: 'Output name'
+        default: 'value'
+      fallback:
+        description: 'Fallback value'
+        default: '0.0.0'
+      property:
+        description: 'JSON Property (dot separated)'
+        default: 'version'
+      override_with:
+        description: 'Override value:'
+        default: '2.3.4'
+      use_override:
+        description: 'Use override? (true/false)'
+        default: 'false'
+      output_file:
+        description: 'Output file (relative to root)'
+        default: 'package.json'
+
+jobs:
+  live-test:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    timeout-minutes: 30
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: Print environment variables
+        run: printenv
+        shell: bash
+
+      - name: List files in workspace
+        run: ls -la "${GITHUB_WORKSPACE}"
+        shell: bash
+
+      - name: Read version from package.json
+        uses: amochkin/action-json@v1
+        id: read_value_test
+        with:
+          mode: read
+          file: ${{ github.event.inputs.file }}
+          value: ${{ github.event.inputs.value }}
+          output_name: ${{ github.event.inputs.output_name }}
+          output_file: ${{ github.event.inputs.output_file }}
+          property: ${{ github.event.inputs.property }}
+          fallback: ${{ github.event.inputs.fallback }}
+          override_with: ${{ github.event.inputs.override_with }}
+          use_override: ${{ github.event.inputs.use_override }}
+
+      - name: Write value from package.json
+        uses: amochkin/action-json@v1
+        id: write_value_test
+        with:
+          mode: write
+          file: ${{ github.event.inputs.file }}
+          value: ${{ github.event.inputs.value }}
+          output_name: ${{ github.event.inputs.output_name }}
+          output_file: ${{ github.event.inputs.output_file }}
+          property: ${{ github.event.inputs.property }}
+          fallback: ${{ github.event.inputs.fallback }}
+          override_with: ${{ github.event.inputs.override_with }}
+          use_override: ${{ github.event.inputs.use_override }}
+
+      - name: Print value output
+        run: echo "${{ github.event.inputs.output_name }}"="${{ steps.read_value_test.outputs[github.event.inputs.output_name] }}"
+        shell: bash
+
+      - name: Print file
+        run: cat ${{ github.event.inputs.output_file }}
+        shell: bash
+
+      - name: Print all output of read_value_test joined
+        run: echo all outputs "${{join(steps.read_value_test.outputs.*, '\n')}}"
+        shell: bash
