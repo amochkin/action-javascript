@@ -30,3 +30,36 @@ GitHub Action to execute Javascript within workflows.
 
 ## Examples
 
+### Basic
+
+```yaml
+- name: Execute Javascript
+  uses: amochkin/action-javascript@v1
+  with:
+    js: |
+      console.log('Hello World!')
+```
+
+### Read inputs
+
+```yaml
+- name: Execute Javascript
+  uses: amochkin/action-javascript@v1
+  with:
+    input_1: 'Hello'
+    js: |
+      `${input("input_1")} World!`
+```
+
+### Write outputs
+
+```yaml
+- name: Execute Javascript
+  uses: amochkin/action-javascript@v1
+  id: <step_id>
+  with:
+    js: |
+      output("output_1", "Hello World!")
+- name: Print output
+  run: echo ${{ steps.<step_id>.outputs.output_1 }}
+```
