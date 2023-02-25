@@ -53,19 +53,19 @@ const input = <T extends InputType>(name: string, type?: T): ReturnType<T> => {
 };
 
 export const run = () => {
-	const jsInput = input('js_input', 'string');
-	const jsResult = input('js_result', 'string');
-	const js = input(jsInput || DEFAULT_INPUT_JS, 'string');
+	const jsInput = input('js_input', 'string') || DEFAULT_INPUT_JS;
+	const jsResult = input('js_result', 'string') || DEFAULT_OUTPUT_RESULT;
+	const js = input(jsInput, 'string');
 
 	if (!js) {
-		throw new Error('"js" input is required.');
+		throw new Error(`"${jsInput}" input is required.`);
 	}
 
 	core.debug('Resolved parameters: ' + keyValue({ workspace, js, jsInput, jsResult }));
 
 	try {
 		const result = eval(js);
-		output(result, jsResult || DEFAULT_OUTPUT_RESULT);
+		output(String(result), jsResult);
 	} catch (error) {
 		if (error instanceof Error) {
 			core.setFailed(error);
