@@ -6,7 +6,7 @@ GitHub Action to execute Javascript within workflows.
 
 - Executes any Javascript code
 - Inputs and outputs can be overridden
-- Can read arbitrary inputs and write arbitratry outputs
+- Can read arbitrary inputs and write arbitrary outputs
 
 ## Usage
 
@@ -24,9 +24,9 @@ GitHub Action to execute Javascript within workflows.
 
 ### Outputs
 
-| Output   | Description                |
-|----------|----------------------------|
-| `result` | Javasript execution result |
+| Output   | Description                 |
+|----------|-----------------------------|
+| `result` | Javascript execution result |
 
 ## Examples
 
@@ -59,7 +59,7 @@ GitHub Action to execute Javascript within workflows.
   id: <step_id>
   with:
     js: |
-      output("output_1", "Hello World!")
+      output("Hello World!", "output_1")
 - name: Print output
   run: echo ${{ steps.<step_id>.outputs.output_1 }}
 ```
