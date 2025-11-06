@@ -7,6 +7,7 @@ import { run } from '../src/action';
 
 interface IRunInputs {
 	js?: string;
+	url?: string;
 	js_input?: string;
 	js_result?: string;
 	test_input?: string;
@@ -102,6 +103,11 @@ describe('Execution tests', () => {
 			inputs: { ...defaultInputs, js_result: 'test_output', js: 'output("test12345", "test_output")' },
 			output: 'test12345',
 		},
+		{
+			name: "Download file from URL and execute it's content",
+			inputs: { ...defaultInputs, url: 'https://raw.githubusercontent.com/amochkin/action-javascript/main/tests/data/sample.js' },
+			output: 'Hello World!',
+		}
 	];
 
 	executionTestCases.forEach((t, i) =>

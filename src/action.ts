@@ -53,6 +53,7 @@ const input = <T extends InputType>(name: string, type?: T): ReturnType<T> => {
 };
 
 export const run = () => {
+	const url = input('url', 'string');
 	const jsInput = input('js_input', 'string') || DEFAULT_INPUT_JS;
 	const jsResult = input('js_result', 'string') || DEFAULT_OUTPUT_RESULT;
 	const js = input(jsInput, 'string');
